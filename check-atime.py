@@ -28,12 +28,15 @@ try:
     # Create test file
     with open("test.txt", "w") as outfile:
         outfile.write("test!")
-    # Get first atime
-    atime1 = last_file_access_time("test.txt")
-    # Now read file
+    time.sleep(0.1)
+    # Read & get first atime
     with open("test.txt") as infile:
         infile.read()
-    time.sleep(0.2)
+    atime1 = last_file_access_time("test.txt")
+    # Now read file
+    time.sleep(0.1)
+    with open("test.txt") as infile:
+        infile.read()
     # Different atime after read?
     atime2 = last_file_access_time("test.txt")
     # Set OLD atime for relatime check!
