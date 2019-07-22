@@ -21,10 +21,11 @@ Don't know if your filesystem is mounted in a suitable atime mode? Read [How to 
 
 *copy-since* needs two pararameters: A *source* directory where the files will be read from and a *target* directory where the files will be copied to (the target directory is automatically created if it does not exist).
 
-First, run the prepare script
+First, run the prepare script:
 ```sh
-./copy-since-prepare.py <source directory>
+./copy-since-prepare.py
 ```
+This will store the current timestamp in `copy-since-timestamp.txt`.
 
 Any file accessed (read or write) after the call to `copy-since-prepare.py` will be copied later, so now you need to run your build / software etc. **Be sure to run a clean build (e.g. `make clean && make`) so all required files will be accessed!**
 

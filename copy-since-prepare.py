@@ -19,8 +19,7 @@ def set_file_access_time(filename, atime):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("source", help="The directory to copy from")
-    parser.add_argument("-c", "--compatibility", action="store_true", help="Compatibility mode (for relatime)")
+    parser.add_argument("-c", "--compatibility", metavar="SOURCEDIR", help="Compatibility mode (for relatime-mounted filesystems). Use the source directory as argument.")
     args = parser.parse_args()
 
     write_reference_timestamp_to_file("copy-since-timestamp.txt")
@@ -29,7 +28,7 @@ if __name__ == "__main__":
         # Set "really old" access time on all those files
         # This forces "relatime"-style mounted filesystems to update on access!
         atime = datetime(2000, 1, 1, 0, 0, 0)
-        for subdir, dirs, files in os.walk(args.source):
+        for subdir, dirs, files in os.walk(args.compatibility):
             for directory in dirs:
                 set_file_access_time(os.path.join(subdir, directory), atime)
             for file in files:
