@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-This utility script checks which atime mode (always-update on access, relatime or noatime)
+This utility script checks which atime mode (strictatime, relatime or noatime)
 is in use for the current filesystem
 """
 import os
@@ -17,7 +17,7 @@ def set_file_access_time(filename, atime):
     """
     stat = os.stat(filename)
     mtime = stat.st_mtime
-    os.utime(filename, times=(datetime_to_timestamp(atime), mtime))
+    os.utime(filename, (datetime_to_timestamp(atime), mtime))
 
 
 def last_file_access_time(filename):
@@ -60,7 +60,7 @@ try:
     elif changed_after_simple_access and (not changed_after_old_atime):
         print("Unable to determine your access time mode")
     else: # Both updated
-        print("Your filesystem is mounted in ATIME mode - access times will be updated on EVERY file access")
+        print("Your filesystem is mounted in STRICTATIME mode - access times will be updated on EVERY file access")
 finally:
     # Delete our test file
     try:
