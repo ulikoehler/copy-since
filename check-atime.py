@@ -7,6 +7,9 @@ import os
 import time
 from datetime import datetime
 
+def datetime_to_timestamp(dt):
+    return time.mktime(dt.timetuple()) + dt.microsecond/1e6
+
 def set_file_access_time(filename, atime):
     """
     Set the access time of a given filename to the given atime.
@@ -14,7 +17,7 @@ def set_file_access_time(filename, atime):
     """
     stat = os.stat(filename)
     mtime = stat.st_mtime
-    os.utime(filename, times=(atime.timestamp(), mtime))
+    os.utime(filename, times=(datetime_to_timestamp(atime), mtime))
 
 
 def last_file_access_time(filename):
