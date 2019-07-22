@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import shutil
 import argparse
 from datetime import datetime
 
@@ -18,17 +19,31 @@ def last_file_access_time(filename):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("from", help="The directory to copy from")
-    parser.add_argument("to", help="The directory to copy to")
+    parser.add_argument("to", nargs="?", help="The directory to copy to")
     args = parser.parse_args()
 
     # 
     reftime = read_reference_timestamp_from_file("copy-since-timestamp.txt")
-    print(reftime)
 
-    for subdir, dirs, files in os.walk(vars(args)["from"]):
+    fromdir = vars(args)["from"]
+    for subdir, dirs, files in os.walk(fromdir):
         for file in files:
-            filepath = os.path.abspath(os.path.join(subdir, file))
-            atime = last_file_access_time(filepath)
+            abspath = os.path.abspath(os.path.join(subdir, file))
+            if not os.path.isfile(abspath):
+                continue
+            # Skip copying if file has not been accessed
+            atime = last_file_access_time(abspath)
             if atime < reftime:
                 continue
-            print(filepath)
+            # Copy file if enabled
+            relpath = os.path.relpath(abspath, start=fromdir)
+            if args.to: # if we should copy
+                dstpath = os.path.join(args.to, relpath)
+                # Create dst directory if doesnt exist
+                dstdir = os.path.dirname(dstpath)
+                os.makedirs(dstdir, exist_ok=True)
+                # Copy file (try to conserve metadata)
+                shutil.copy2(abspath, dstpath)
+                print('Copied {} to {}'.format(relpath, dstpath))
+            else: # we wont copy => just print
+                print(relpath)
