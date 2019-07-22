@@ -18,15 +18,14 @@ def last_file_access_time(filename):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("from", help="The directory to copy from")
-    parser.add_argument("to", nargs="?", help="The directory to copy to")
+    parser.add_argument("source", help="The directory to copy from")
+    parser.add_argument("target", nargs="?", help="The directory to copy to")
     args = parser.parse_args()
 
     # 
     reftime = read_reference_timestamp_from_file("copy-since-timestamp.txt")
 
-    fromdir = vars(args)["from"]
-    for subdir, dirs, files in os.walk(fromdir):
+    for subdir, dirs, files in os.walk(args.source):
         for file in files:
             abspath = os.path.abspath(os.path.join(subdir, file))
             if not os.path.isfile(abspath):
@@ -36,9 +35,9 @@ if __name__ == "__main__":
             if atime < reftime:
                 continue
             # Copy file if enabled
-            relpath = os.path.relpath(abspath, start=fromdir)
-            if args.to: # if we should copy
-                dstpath = os.path.join(args.to, relpath)
+            relpath = os.path.relpath(abspath, start=args.source)
+            if args.target: # if we should copy
+                dstpath = os.path.join(args.target, relpath)
                 # Create dst directory if doesnt exist
                 dstdir = os.path.dirname(dstpath)
                 os.makedirs(dstdir, exist_ok=True)
