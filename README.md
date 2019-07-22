@@ -15,6 +15,8 @@ Instead of manually copying files and checking for compiler errors
 
 In case you are running a Linux-based system, an alternative to `copy-since` is [`selective-copy`](https://github.com/ulikoehler/selective-copy) which uses `open()` syscall hijacking and hence does not depend on filesystem access times being enabled.
 
+Don't know if your filesystem is mounted in a suitable atime mode? Read [How to check if your filesystem is mounted in noatime, relatime or strictatime mode](https://techoverflow.net/2019/07/22/how-to-check-if-your-filesystem-is-mounted-in-noatime-relatime-or-strictatime-mode/) on my blog to find out (or just try `copy-since`). This repository also contains `check-atime.py` which is used in the aforementioned post. Remember that you need to run it in the source directory you intend to use for `copy-since.py` to get accurate results!
+
 ### Usage
 
 *copy-since* needs two pararameters: A *source* directory where the files will be read from and a *target* directory where the files will be copied to (the target directory is automatically created if it does not exist).
