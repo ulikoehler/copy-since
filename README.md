@@ -31,8 +31,16 @@ Any file accessed (read or write) after the call to `copy-since-prepare.py` will
 Now run the main copy script:
 
 ```sh
-./copy-since-prepare.py <source directory> <target directory>
+./copy-since.py <source directory> <target directory>
 ```
+
+In case this does not copy any files, try using *compatibility mode* for `copy-since-prepare.py`:
+```sh
+./copy-since-prepare.py -c <source-directory>
+```
+This will set the access. Compatibility mode is required for *relatime*-mounted filesystems (default on Linux) ; on *strictatime*-mounted filesystems you don't need compatibility mode, whereas `copy-since` doesn't work at all on *noatime*-mounted filesystems.
+
+Read [How to check if your filesystem is mounted in noatime, relatime or strictatime mode](https://techoverflow.net/2019/07/22/how-to-check-if-your-filesystem-is-mounted-in-noatime-relatime-or-strictatime-mode/) on my blog to find out which mode your filesystem is mounted as (hint: Windows default: *strictatime*, Linux default: *relatime*).
 
 ### How does it work?
 
