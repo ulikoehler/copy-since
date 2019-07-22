@@ -28,6 +28,9 @@ if __name__ == "__main__":
     # This forces "relatime"-style mounted filesystems to update on access!
     atime = datetime(2000, 1, 1, 0, 0, 0)
     for subdir, dirs, files in os.walk(vars(args)["from"]):
+        for directory in dirs:
+            print(os.path.join(subdir, directory))
+            set_file_access_time(os.path.join(subdir, directory), atime)
         for file in files:
             set_file_access_time(os.path.join(subdir, file), atime)
-            
+        set_file_access_time(os.path.join(subdir), atime)

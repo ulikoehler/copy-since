@@ -5,7 +5,7 @@ from datetime import datetime
 
 def read_reference_timestamp_from_file(filename):
     with open(filename) as timestampfile:
-        return datetime.strptime("%Y-%m-%d %H:%M:%S", timestampfile.read().strip())
+        return datetime.strptime(timestampfile.read().strip(), "%Y-%m-%d %H:%M:%S")
 
 
 def last_file_access_time(filename):
@@ -22,7 +22,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # 
-    reftime = write_reference_timestamp_to_file("copy-since-timestamp.txt")
+    reftime = read_reference_timestamp_from_file("copy-since-timestamp.txt")
     print(reftime)
 
     for subdir, dirs, files in os.walk(vars(args)["from"]):
